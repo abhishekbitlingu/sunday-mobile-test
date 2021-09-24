@@ -163,7 +163,6 @@ export const CreateAccount: React.FC<CreateAccountProps> = (): JSX.Element => {
           email: email.trim().toLowerCase(),
           password: password.trim(),
         };
-        console.log(newUser);
         result = await saveUser(db, newUser);
         if (result) {
           await AsyncStorage.setItem(

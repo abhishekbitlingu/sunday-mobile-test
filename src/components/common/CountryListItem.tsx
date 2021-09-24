@@ -22,9 +22,6 @@ const styles = StyleSheet.create({
 export const CountryListItem: React.FC<CountryListItemProps> = (
   props,
 ): JSX.Element => {
-  console.log(props);
-  console.log(styles);
-
   const handleOnPress = (): void => {
     props.onPress(props.data);
   };
