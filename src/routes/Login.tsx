@@ -7,6 +7,7 @@ import {
   screenTitles,
   strings,
   asyncStorageKeys,
+  errorMessages,
 } from '@/utils/constants.json';
 import {FloatingInputText} from '@/components/common/FloatingInputText';
 import EmailIcon from 'react-native-vector-icons/FontAwesome';
@@ -17,6 +18,7 @@ import {getDBConnection, getUser} from '@/local-storage/SQLiteHelper';
 import {AuthContext} from '@/components/navigation/Navigator';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const styles = StyleSheet.create({
   container: {
@@ -84,6 +86,10 @@ const styles = StyleSheet.create({
     color: colors.uiWhite,
     padding: 10,
   },
+  scrollview: {
+    flex: 1,
+    backgroundColor: colors.uiWhite,
+  },
 });
 
 export const Login: React.FC<LoginProps> = (): JSX.Element => {
@@ -99,16 +105,16 @@ export const Login: React.FC<LoginProps> = (): JSX.Element => {
     let errorMessage: string;
     if (AppUtilities.isEmpty(email)) {
       isError = true;
-      errorTitle = 'Invalid Email';
-      errorMessage = 'Email cannot be empty';
+      errorTitle = errorMessages.invalidEmailTitle;
+      errorMessage = errorMessages.emailCannotBeEmptyMessage;
     } else if (!AppUtilities.isValidEmail(email)) {
       isError = true;
-      errorTitle = 'Invalid Email';
-      errorMessage = "Email you've entered is not valid";
+      errorTitle = errorMessages.invalidEmailTitle;
+      errorMessage = errorMessages.invalidEmailMessage;
     } else if (AppUtilities.isEmpty(password)) {
       isError = true;
-      errorTitle = 'Invalid Password';
-      errorMessage = 'Password cannot be empty';
+      errorTitle = errorMessages.invalidPasswordTitle;
+      errorMessage = errorMessages.passwordCannotBeEmpty;
     } else {
       isError = false;
       errorTitle = '';
@@ -116,7 +122,7 @@ export const Login: React.FC<LoginProps> = (): JSX.Element => {
     }
 
     if (isError) {
-      AppUtilities.showAlert(errorMessage, errorTitle, 'Ok');
+      AppUtilities.showAlert(errorMessage, errorTitle);
     } else {
       let shouldUserLogIn = false;
       try {
@@ -142,9 +148,8 @@ export const Login: React.FC<LoginProps> = (): JSX.Element => {
         signIn(email.toLowerCase().trim());
       } else {
         AppUtilities.showAlert(
-          'Email and Password does not match any of our records. Please try with a different user',
-          'Information',
-          'Ok',
+          errorMessages.invalidCredentials,
+          strings.information,
         );
       }
     }
@@ -153,85 +158,92 @@ export const Login: React.FC<LoginProps> = (): JSX.Element => {
     return <LoadingIndicator />;
   } else {
     return (
-      <View style={styles.container}>
-        <View style={styles.innerContainer}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>{screenTitles.login}</Text>
-            <Text style={styles.descriptionText}>
-              {strings.loginDescription}
-            </Text>
-          </View>
-          <View style={styles.formContainer}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollview}
+        keyboardShouldPersistTaps={'handled'}
+        enableOnAndroid>
+        <View style={styles.container}>
+          <View style={styles.innerContainer}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerText}>{screenTitles.login}</Text>
+              <Text style={styles.descriptionText}>
+                {strings.loginDescription}
+              </Text>
+            </View>
             <View style={styles.formContainer}>
-              <View style={styles.floatingInputContainer}>
-                <FloatingInputText
-                  onChange={value => {
-                    setEmail(value);
-                  }}
-                  placeholderTextColor={colors.uiGray}
-                  placeHolderText={strings.emailTitle}
-                  value={email}
-                  iconComponent={
-                    <EmailIcon
-                      name={'envelope-o'}
-                      size={14}
-                      color={email.length > 0 ? colors.uiBlack : colors.uiGray}
-                    />
-                  }
-                />
+              <View style={styles.formContainer}>
+                <View style={styles.floatingInputContainer}>
+                  <FloatingInputText
+                    onChange={value => {
+                      setEmail(value);
+                    }}
+                    placeholderTextColor={colors.uiGray}
+                    placeHolderText={strings.emailTitle}
+                    value={email}
+                    iconComponent={
+                      <EmailIcon
+                        name={'envelope-o'}
+                        size={14}
+                        color={
+                          email.length > 0 ? colors.uiBlack : colors.uiGray
+                        }
+                      />
+                    }
+                  />
+                </View>
+                <View style={styles.floatingInputContainer}>
+                  <FloatingInputText
+                    onChange={value => {
+                      setPassword(value);
+                    }}
+                    secureTextEntry
+                    placeholderTextColor={colors.uiGray}
+                    placeHolderText={strings.passwordTitle}
+                    rightButtonText={strings.forgotPasswordLink.toUpperCase()}
+                    value={password}
+                    iconComponent={
+                      <PasswordIcon
+                        name={'lock'}
+                        size={16}
+                        color={
+                          password.length > 0 ? colors.uiBlack : colors.uiGray
+                        }
+                      />
+                    }
+                  />
+                </View>
               </View>
-              <View style={styles.floatingInputContainer}>
-                <FloatingInputText
-                  onChange={value => {
-                    setPassword(value);
-                  }}
-                  secureTextEntry
-                  placeholderTextColor={colors.uiGray}
-                  placeHolderText={strings.passwordTitle}
-                  rightButtonText={strings.forgotPasswordLink.toUpperCase()}
-                  value={password}
-                  iconComponent={
-                    <PasswordIcon
-                      name={'lock'}
-                      size={16}
-                      color={
-                        password.length > 0 ? colors.uiBlack : colors.uiGray
-                      }
-                    />
-                  }
-                />
+              <View style={styles.buttonMaincontainer}>
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  activeOpacity={0.5}
+                  style={styles.buttonContainer}>
+                  <Text style={styles.buttonText}>
+                    {screenTitles.login.toUpperCase()}
+                  </Text>
+                  <ArrowIcon
+                    name={'arrowright'}
+                    size={20}
+                    color={colors.uiWhite}
+                  />
+                </TouchableOpacity>
               </View>
-            </View>
-            <View style={styles.buttonMaincontainer}>
-              <TouchableOpacity
-                onPress={handleSubmit}
-                activeOpacity={0.5}
-                style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>
-                  {screenTitles.login.toUpperCase()}
-                </Text>
-                <ArrowIcon
-                  name={'arrowright'}
-                  size={20}
-                  color={colors.uiWhite}
-                />
-              </TouchableOpacity>
             </View>
           </View>
+          <View style={styles.bottomTextContainer}>
+            <Text style={styles.noAccountText}>{strings.doNotHaveAccount}</Text>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => {
+                navigation.navigate('CreateAccount');
+              }}>
+              <Text style={[styles.noAccountText, styles.clickableLinkText]}>
+                {strings.signUp}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.bottomTextContainer}>
-          <Text style={styles.noAccountText}>{strings.doNotHaveAccount}</Text>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => {
-              navigation.navigate('CreateAccount');
-            }}>
-            <Text style={[styles.noAccountText, styles.clickableLinkText]}>
-              {strings.signUp}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 };

@@ -10,8 +10,25 @@
         "login": "Login",
         "createAccount": "Create Account",
         "countryList": "Select a country",
-        "playerList": "Players",
-        "userList": "UserList"
+        "userList": "User List"
+    },
+    "errorMessages": {
+        "invalidFullnameTitle": "Invalid Fullname",
+        "invalidFullnameMessage": "Full name cannot be empty",
+        "invalidEmailTitle": "Invalid Email",
+        "invalidPasswordTitle": "Invalid Password",
+        "passwordDoNotMatchTitle": "Passwords Do not match",
+        "emailCannotBeEmptyMessage": "Email cannot be empty",
+        "invalidEmailMessage": "Email you've entered is not valid",
+        "passwordCannotBeEmpty": "Password cannot be empty",
+        "confPasswordCannotBeEmpty": "Confirmed Password cannot be empty",
+        "passwordDoNotMatchMessage": "Password that you have entered do not match",
+        "failedToSignUp":"We have failed signing you up. Please try again.",
+        "invalidCredentials": "Email and Password does not match any of our records. Please try with a different user"
+    },
+    "drawerLabels": {
+        "countryList": "Country list",
+        "userList": "User list"
     },
     "colors": {
         "uiGray": "rgb(160,160,160)",
@@ -31,7 +48,9 @@
         "confirmPassword": "Confirm password",
         "alreadyHaveAccount": "Already have an account?",
         "noResultsFound": "No results found. Please try again",
-        "searchBarPlaceHolder": "Search"
+        "searchBarPlaceHolder": "Search",
+        "information": "Information",
+        "captain": "Captain"
     },
     "urls": {
         "fetchCountries": "http://test.oye.direct/players.json"

@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.uiGray,
   },
   iconContainer: {
-    padding: 8,
+    paddingHorizontal: 8,
   },
   justifyCenter: {
     justifyContent: 'center',

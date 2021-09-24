@@ -11,6 +11,7 @@ import {
   screenTitles,
   strings,
   asyncStorageKeys,
+  errorMessages,
 } from '@/utils/constants.json';
 import {FloatingInputText} from '@/components/common/FloatingInputText';
 import ProfileIcon from 'react-native-vector-icons/Feather';
@@ -27,6 +28,7 @@ import {
 import {AuthContext} from '@/components/navigation/Navigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const styles = StyleSheet.create({
   container: {
@@ -99,6 +101,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginVertical: 40,
   },
+  scrollview: {
+    flex: 1,
+    backgroundColor: colors.uiWhite,
+  },
 });
 
 export const CreateAccount: React.FC<CreateAccountProps> = (): JSX.Element => {
@@ -116,28 +122,28 @@ export const CreateAccount: React.FC<CreateAccountProps> = (): JSX.Element => {
     let errorMessage: string;
     if (AppUtilities.isEmpty(fullName)) {
       isError = true;
-      errorTitle = 'Invalid Fullname';
-      errorMessage = 'Full name cannot be empty';
+      errorTitle = errorMessages.invalidFullnameTitle;
+      errorMessage = errorMessages.invalidFullnameMessage;
     } else if (AppUtilities.isEmpty(email)) {
       isError = true;
-      errorTitle = 'Invalid Email';
-      errorMessage = 'Email cannot be empty';
+      errorTitle = errorMessages.invalidEmailTitle;
+      errorMessage = errorMessages.emailCannotBeEmptyMessage;
     } else if (!AppUtilities.isValidEmail(email)) {
       isError = true;
-      errorTitle = 'Invalid Email';
-      errorMessage = "Email you've entered is not valid";
+      errorTitle = errorMessages.invalidEmailTitle;
+      errorMessage = errorMessages.invalidEmailMessage;
     } else if (AppUtilities.isEmpty(password)) {
       isError = true;
-      errorTitle = 'Invalid Password';
-      errorMessage = 'Password cannot be empty';
+      errorTitle = errorMessages.invalidPasswordTitle;
+      errorMessage = errorMessages.passwordCannotBeEmpty;
     } else if (AppUtilities.isEmpty(confirmPassword)) {
       isError = true;
-      errorTitle = 'Invalid Password';
-      errorMessage = 'Confirmed password cannot be empty';
+      errorTitle = errorMessages.invalidPasswordTitle;
+      errorMessage = errorMessages.confPasswordCannotBeEmpty;
     } else if (password.trim() !== confirmPassword.trim()) {
       isError = true;
-      errorTitle = 'Passwords Do not match';
-      errorMessage = 'Password that you have entered do not match';
+      errorTitle = errorMessages.passwordDoNotMatchTitle;
+      errorMessage = errorMessages.passwordDoNotMatchMessage;
     } else {
       isError = false;
       errorTitle = '';
@@ -169,17 +175,15 @@ export const CreateAccount: React.FC<CreateAccountProps> = (): JSX.Element => {
         } else {
           setIsLoading(false);
           AppUtilities.showAlert(
-            'We have failed signing you up. Please try again.',
-            'Information',
-            'Ok',
+            errorMessages.failedToSignUp,
+            strings.information,
           );
         }
       } catch {
         setIsLoading(false);
         AppUtilities.showAlert(
-          'We have failed signing you up. Please try again.',
-          'Information',
-          'Ok',
+          errorMessages.failedToSignUp,
+          strings.information,
         );
       }
     }
@@ -189,127 +193,139 @@ export const CreateAccount: React.FC<CreateAccountProps> = (): JSX.Element => {
     return <LoadingIndicator />;
   } else {
     return (
-      <View style={styles.container}>
-        <View style={styles.innerContainer}>
-          <TouchableOpacity
-            style={styles.headerBackButton}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <BackIcon name={'arrowleft'} size={25} color={colors.uiGray} />
-          </TouchableOpacity>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>{screenTitles.createAccount}</Text>
-          </View>
-          <View style={styles.formContainer}>
-            <View>
-              <View style={styles.floatingInputContainer}>
-                <FloatingInputText
-                  onChange={value => {
-                    setFullName(value);
-                  }}
-                  placeholderTextColor={colors.uiGray}
-                  placeHolderText={strings.fullNameTitle}
-                  value={fullName}
-                  iconComponent={
-                    <ProfileIcon
-                      name={'user'}
-                      size={17}
-                      color={
-                        fullName.length > 0 ? colors.uiBlack : colors.uiGray
-                      }
-                    />
-                  }
-                />
+      <KeyboardAwareScrollView
+        extraHeight={10}
+        contentContainerStyle={styles.scrollview}
+        keyboardShouldPersistTaps={'handled'}
+        enableOnAndroid>
+        <View style={styles.container}>
+          <View style={styles.innerContainer}>
+            <TouchableOpacity
+              style={styles.headerBackButton}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <BackIcon name={'arrowleft'} size={25} color={colors.uiGray} />
+            </TouchableOpacity>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerText}>
+                {screenTitles.createAccount}
+              </Text>
+            </View>
+            <View style={styles.formContainer}>
+              <View>
+                <View style={styles.floatingInputContainer}>
+                  <FloatingInputText
+                    onChange={value => {
+                      setFullName(value);
+                    }}
+                    placeholderTextColor={colors.uiGray}
+                    placeHolderText={strings.fullNameTitle}
+                    value={fullName}
+                    iconComponent={
+                      <ProfileIcon
+                        name={'user'}
+                        size={17}
+                        color={
+                          fullName.length > 0 ? colors.uiBlack : colors.uiGray
+                        }
+                      />
+                    }
+                  />
+                </View>
+                <View style={styles.floatingInputContainer}>
+                  <FloatingInputText
+                    onChange={value => {
+                      setEmail(value);
+                    }}
+                    placeholderTextColor={colors.uiGray}
+                    placeHolderText={strings.emailTitle}
+                    value={email}
+                    iconComponent={
+                      <EmailIcon
+                        name={'envelope-o'}
+                        size={14}
+                        color={
+                          email.length > 0 ? colors.uiBlack : colors.uiGray
+                        }
+                      />
+                    }
+                  />
+                </View>
+                <View style={styles.floatingInputContainer}>
+                  <FloatingInputText
+                    onChange={value => {
+                      setPassword(value);
+                    }}
+                    secureTextEntry
+                    placeholderTextColor={colors.uiGray}
+                    placeHolderText={strings.passwordTitle}
+                    value={password}
+                    iconComponent={
+                      <PasswordIcon
+                        name={'lock'}
+                        size={16}
+                        color={
+                          password.length > 0 ? colors.uiBlack : colors.uiGray
+                        }
+                      />
+                    }
+                  />
+                </View>
+                <View style={styles.floatingInputContainer}>
+                  <FloatingInputText
+                    onChange={value => {
+                      setConfirmPassword(value);
+                    }}
+                    secureTextEntry
+                    placeholderTextColor={colors.uiGray}
+                    placeHolderText={strings.confirmPassword}
+                    value={confirmPassword}
+                    iconComponent={
+                      <PasswordIcon
+                        name={'lock'}
+                        size={16}
+                        color={
+                          confirmPassword.length > 0
+                            ? colors.uiBlack
+                            : colors.uiGray
+                        }
+                      />
+                    }
+                  />
+                </View>
               </View>
-              <View style={styles.floatingInputContainer}>
-                <FloatingInputText
-                  onChange={value => {
-                    setEmail(value);
-                  }}
-                  placeholderTextColor={colors.uiGray}
-                  placeHolderText={strings.emailTitle}
-                  value={email}
-                  iconComponent={
-                    <EmailIcon
-                      name={'envelope-o'}
-                      size={14}
-                      color={email.length > 0 ? colors.uiBlack : colors.uiGray}
-                    />
-                  }
-                />
-              </View>
-              <View style={styles.floatingInputContainer}>
-                <FloatingInputText
-                  onChange={value => {
-                    setPassword(value);
-                  }}
-                  secureTextEntry
-                  placeholderTextColor={colors.uiGray}
-                  placeHolderText={strings.passwordTitle}
-                  value={password}
-                  iconComponent={
-                    <PasswordIcon
-                      name={'lock'}
-                      size={16}
-                      color={
-                        password.length > 0 ? colors.uiBlack : colors.uiGray
-                      }
-                    />
-                  }
-                />
-              </View>
-              <View style={styles.floatingInputContainer}>
-                <FloatingInputText
-                  onChange={value => {
-                    setConfirmPassword(value);
-                  }}
-                  secureTextEntry
-                  placeholderTextColor={colors.uiGray}
-                  placeHolderText={strings.confirmPassword}
-                  value={confirmPassword}
-                  iconComponent={
-                    <PasswordIcon
-                      name={'lock'}
-                      size={16}
-                      color={
-                        confirmPassword.length > 0
-                          ? colors.uiBlack
-                          : colors.uiGray
-                      }
-                    />
-                  }
-                />
+              <View style={styles.buttonMaincontainer}>
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  activeOpacity={0.5}
+                  style={styles.buttonContainer}>
+                  <Text style={styles.buttonText}>
+                    {strings.signUp.toUpperCase()}
+                  </Text>
+                  <ArrowIcon
+                    name={'arrowright'}
+                    size={20}
+                    color={colors.uiWhite}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.buttonMaincontainer}>
-              <TouchableOpacity
-                onPress={handleSubmit}
-                activeOpacity={0.5}
-                style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>
-                  {strings.signUp.toUpperCase()}
-                </Text>
-                <ArrowIcon
-                  name={'arrowright'}
-                  size={20}
-                  color={colors.uiWhite}
-                />
-              </TouchableOpacity>
-            </View>
           </View>
-        </View>
-        <View style={styles.bottomTextContainer}>
-          <Text style={styles.noAccountText}>{strings.alreadyHaveAccount}</Text>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.goBack()}>
-            <Text style={[styles.noAccountText, styles.clickableLinkText]}>
-              {strings.signIn}
+          <View style={styles.bottomTextContainer}>
+            <Text style={styles.noAccountText}>
+              {strings.alreadyHaveAccount}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.goBack()}>
+              <Text style={[styles.noAccountText, styles.clickableLinkText]}>
+                {strings.signIn}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 };

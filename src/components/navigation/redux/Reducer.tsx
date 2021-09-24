@@ -1,3 +1,4 @@
+import {RESTORE_TOKEN, SIGN_IN, SIGN_OUT} from './Actions';
 import {NavigationState, NavigationStateAction} from './Types';
 
 export const reducer = (
@@ -5,19 +6,19 @@ export const reducer = (
   action: NavigationStateAction,
 ): NavigationState => {
   switch (action.type) {
-    case 'RESTORE_TOKEN':
+    case RESTORE_TOKEN:
       return {
         ...prevState,
         userEmail: action.token,
         isLoading: false,
       };
-    case 'SIGN_IN':
+    case SIGN_IN:
       return {
         ...prevState,
         isSignout: false,
         userEmail: action.token,
       };
-    case 'SIGN_OUT':
+    case SIGN_OUT:
       return {
         ...prevState,
         isSignout: true,

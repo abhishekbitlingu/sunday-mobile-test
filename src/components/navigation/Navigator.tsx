@@ -15,7 +15,7 @@ import {NavigationAuthContext} from './redux/Types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {asyncStorageKeys} from '@/utils/constants.json';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {colors} from '@/utils/constants.json';
+import {colors, screenTitles, drawerLabels} from '@/utils/constants.json';
 import {UserList} from '@/routes/UserList';
 import HamburgerIcon from 'react-native-vector-icons/Feather';
 import PowerIcon from 'react-native-vector-icons/Feather';
@@ -86,7 +86,7 @@ const UserListStack = (): JSX.Element => {
         name={'UserList'}
         component={UserList}
         options={{
-          headerTitle: 'User List',
+          headerTitle: screenTitles.userList,
         }}
       />
     </UserStack.Navigator>
@@ -129,7 +129,7 @@ const CountryListStack = (): JSX.Element => {
       <CountryStack.Screen
         name={'CountryList'}
         component={CountryList}
-        options={{headerTitle: 'Search a Country'}}
+        options={{headerTitle: screenTitles.countryList}}
       />
       <CountryStack.Screen
         name={'PlayerList'}
@@ -164,12 +164,12 @@ const HomeDrawer = (): JSX.Element => {
       }}>
       <Drawer.Screen
         name="CountryListStack"
-        options={{drawerLabel: 'Country list'}}
+        options={{drawerLabel: drawerLabels.countryList}}
         component={CountryListStack}
       />
       <Drawer.Screen
         name="UserListStack"
-        options={{drawerLabel: 'User list'}}
+        options={{drawerLabel: drawerLabels.userList}}
         component={UserListStack}
       />
     </Drawer.Navigator>

@@ -20,6 +20,7 @@ import {
   colors,
   overlayRadioPopupMenuKeys,
   overlayRadioPopupMenuLabels,
+  strings,
 } from '@/utils/constants.json';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import AppUtilities from '@/utils/AppUtilities';
@@ -176,7 +177,7 @@ export const PlayerList: React.FC<PlayerListProps> = (): JSX.Element => {
                 color: item.captain ? colors.uiWhite : colors.uiBlack,
               },
             ]}>
-            Captain
+            {strings.captain}
           </Text>
         )}
       </View>
