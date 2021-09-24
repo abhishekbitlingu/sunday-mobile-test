@@ -1,0 +1,48 @@
+{
+    "screenNames": {
+        "login": "Login",
+        "createAccount": "CreateAccount",
+        "countryList": "CountryList",
+        "playerList": "Playerlist",
+        "userList": "UserList"
+    },
+    "screenTitles": {
+        "login": "Login",
+        "createAccount": "Create Account",
+        "countryList": "Select a country",
+        "playerList": "Players",
+        "userList": "UserList"
+    },
+    "colors": {
+        "uiGray": "rgb(160,160,160)",
+        "uiYellow": "rgb(251,161,71)",
+        "uiWhite": "white",
+        "uiBlack": "black"
+    },
+    "strings": {
+        "loginDescription": "Please sign in to continue.",
+        "emailTitle": "Email",
+        "passwordTitle": "Password",
+        "forgotPasswordLink": "Forgot",
+        "doNotHaveAccount": "Don't have an Account?",
+        "signUp": "Sign up",
+        "signIn": "Sign in",
+        "fullNameTitle": "Full name",
+        "confirmPassword": "Confirm password",
+        "alreadyHaveAccount": "Already have an account?",
+        "noResultsFound": "No results found. Please try again",
+        "searchBarPlaceHolder": "Search"
+    },
+    "urls": {
+        "fetchCountries": "http://test.oye.direct/players.json"
+    },
+    "overlayRadioPopupMenuKeys" : {
+        "sortAscending": "sortAscending",
+        "sortDescending": "sortDescending"
+    },
+    "overlayRadioPopupMenuLabels" : {
+        "sortAscending": "A-Z",
+        "sortDescending": "Z-A"
+    },
+    "asyncStorageKeys": "userEmail"
+}
